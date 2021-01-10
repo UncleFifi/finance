@@ -6,6 +6,8 @@ interface IDOMElements {
     rate: HTMLElement
     time: HTMLElement
     pmt: HTMLElement
+    table: HTMLElement
+    submitButton: HTMLElement
 }
 
 interface IFinanceValues {
@@ -27,11 +29,14 @@ class Application {
     private FinanceValues: IFinanceValues
     constructor()
     {
+
         this.DOMElements = {
             pv: document.getElementById('pv') as HTMLElement,
             rate: document.getElementById('rate') as HTMLElement,
             time: document.getElementById('time') as HTMLElement,
-            pmt: document.getElementById('pmt') as HTMLElement
+            pmt: document.getElementById('pmt') as HTMLElement,
+            table: document.getElementById('table') as HTMLElement,
+            submitButton: document.getElementById('submit') as HTMLElement
         }
 
         const APR = 0.0425
@@ -46,12 +51,20 @@ class Application {
             pmt: PMT
         }
 
+        this._addEventListeners()
         this._bindHTML()
 
     }
 
+    private _addEventListeners() {
+        this.DOMElements.submitButton.addEventListener('click', () => {
+            this.DOMElements.table.classList.remove('no-display')
+        })
+    }
+
 
     private _bindHTML(){
+        // this.DOMElements.table.classList.remove('no-display')
         this.DOMElements.pv?.setAttribute('value', (Math.abs(this.FinanceValues.pv)).toString())
         this.DOMElements.rate?.setAttribute('value', (this.FinanceValues.rate*100).toString())
         this.DOMElements.time?.setAttribute('value', this.FinanceValues.time.toString())

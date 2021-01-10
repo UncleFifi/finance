@@ -3,30 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+      <!--Import Google Icon Font-->
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
     <title>
         Finance Application
     </title>
+
+    <style>
+        .no-display {
+            display: none;
+        }
+    </style>
 </head>
 <body>
-    <h1>
-        Hello World of finance
-    </h1>
 
-    <div>
-        Mortgage: <input id="pv" type="number"/>
+
+    <div class="row">
+        <div class="input-field col s3">
+            <input placeholder="Present Value" id="pv" type="number" class="validate">
+            <label for="pv">Mortgage</label>
+        </div>
+        <div class="input-field col s3">
+            <input placeholder="APR" id="rate" type="number" class="validate">
+            <label for="rate">Rate</label>
+        </div>
+        <div class="input-field col s3">
+            <input placeholder="Years" id="time" type="number" class="validate">
+            <label for="time">Years</label>
+        </div>
+        <div class="input-field col s3">
+            <input placeholder="Years" id="pmt" type="number" class="validate">
+            <label for="pmt">PMT</label>
+        </div>
     </div>
 
-    <div>
-        Rate: <input id="rate" type="number">
-    </div>
+    <div class="row">
+        <div class="col s3 offset-s9">
+            <button id="submit" class="btn btn-large waves-effect waves-yellow waves-light" type="submit" name="action">Submit
+                <i class="material-icons right">send</i>
+            </button>
+        </div>
+      </div>
 
-    <div>
-        Years: <input id="time" type="number">
-    </div>
 
-    <div>
-        PMT: <input id="pmt" type="number">
-    </div>
+    <table id="table" class="highlight no-display">
+        <thead>
+          <tr>
+              <th>#</th>
+              <th>PMT</th>
+              <th>Principal</th>
+              <th>Interest</th>
+              <th>Balance</th>
+          </tr>
+        </thead>
+        <tbody id="tbl-body">
+          <tr>
+            <td>1</td>
+            <td>Alvin</td>
+            <td>Eclair</td>
+            <td>$0.87</td>
+            <td>$0.87</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Eclair</td>
+            <td>$0.87</td>
+            <td>$0.87</td>
+            <td>$0.87</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Eclair</td>
+            <td>$0.87</td>
+            <td>$0.87</td>
+            <td>$0.87</td>
+          </tr>
+        </tbody>
+      </table>
+
+
 
 </body>
 </html>
