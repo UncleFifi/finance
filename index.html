@@ -24,34 +24,39 @@
         .no-display {
             display: none;
         }
+        .fullWidth {
+            width: 100%;
+        }
     </style>
 </head>
 <body>
 
 
     <div class="row">
-        <div class="input-field col s3">
-            <input placeholder="Present Value" id="pv" type="number" class="validate">
+        <div class="input-field col l3 m6 s12">
+            <input placeholder="Financed Amount" id="pv" type="number">
             <label for="pv">Mortgage</label>
         </div>
-        <div class="input-field col s3">
-            <input placeholder="APR" id="rate" type="number" class="validate">
+        <div class="input-field col l3 m6 s12">
+            <input placeholder="APR" id="rate" type="number">
             <label for="rate">Rate</label>
         </div>
-        <div class="input-field col s3">
-            <input placeholder="Years" id="time" type="number" class="validate">
+        <div class="input-field col l3 m6 s12">
+            <input placeholder="Years" id="time" type="number">
             <label for="time">Years</label>
         </div>
-        <div class="input-field col s3">
-            <input placeholder="Years" id="pmt" type="number" class="validate">
+        <div class="input-field col l3 m6 s12">
+            <input placeholder="Monthly Payment" id="pmt" type="number">
             <label for="pmt">PMT</label>
         </div>
     </div>
 
+
     <div class="row">
-        <div class="col s3 offset-s9">
-            <button id="submit" class="btn btn-large waves-effect waves-yellow waves-light" type="submit" name="action">Submit
-                <i class="material-icons right">send</i>
+        <!-- offset-s9 -->
+        <div class="col s12">
+            <button id="submit" class="btn btn-large waves-effect waves-yellow waves-light fullWidth" type="submit" name="action">Show Amortization Schedule
+                <i class="material-icons right">grid_on</i>
             </button>
         </div>
       </div>
@@ -61,7 +66,6 @@
         <thead>
           <tr>
               <th>#</th>
-              <th>PMT</th>
               <th>Principal</th>
               <th>Interest</th>
               <th>Balance</th>
@@ -70,7 +74,6 @@
         <tbody id="tbl-body">
           <tr>
             <td>1</td>
-            <td>Alvin</td>
             <td>Eclair</td>
             <td>$0.87</td>
             <td>$0.87</td>
@@ -80,12 +83,10 @@
             <td>Eclair</td>
             <td>$0.87</td>
             <td>$0.87</td>
-            <td>$0.87</td>
           </tr>
           <tr>
             <td>3</td>
             <td>Eclair</td>
-            <td>$0.87</td>
             <td>$0.87</td>
             <td>$0.87</td>
           </tr>

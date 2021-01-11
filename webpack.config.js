@@ -29,6 +29,7 @@ module.exports = {
     },
     plugins: [new HtmlWebpackPlugin({
         template: path.resolve(__dirname, 'index.html'),
-        minify: true
+        minify: true,
+        favicon: path.resolve(__dirname, 'favicon.png')
     })]
 }
