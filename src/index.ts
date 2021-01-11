@@ -37,27 +37,7 @@ const sampleTableData: Array<IRowData> = [
         Balance: "1000",
         Interest: "800",
         Principal: "200"
-    },
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    },
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    },
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    },
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    },
+    }
 ]
 
 
@@ -96,7 +76,7 @@ class Application {
 
             TableActions.showTable()
             // Should also build the table from list of values or something....
-            TableActions.render(sampleTableData)
+            TableActions.renderNewTable(sampleTableData)
 
         })
 

@@ -43,11 +43,11 @@ class FinancialTable {
         tr.append(this._createTableData(Balance))
         tr.append(this._createTableData(Interest))
         tr.append(this._createTableData(Principal))
-        this.table.append(tr)
+        this.tableBody.append(tr)
 
     }
 
-    public render(data: Array<IRowData>)
+    public renderNewTable(data: Array<IRowData>)
     {
         this._clearTable()
         data.map((r, i) => this._createTableRow(r, i))
