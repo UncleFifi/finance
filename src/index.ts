@@ -1,19 +1,23 @@
 import Finance from 'tvm-financejs'
+
 import { 
     IDOMElements, 
     IFinanceValues, 
     ITVMElements, 
 } from './contracts'
+
 import {
     currencyRound, 
     getElement, 
     getInputElement
 } from './HelperMethods'
+
 import { 
     NumberValidator, 
     NumberValidatorActions,
     NumberType
 } from './NumberValidator'
+
 import TableActions, {
     IRowData
 } from './Table'
@@ -66,7 +70,12 @@ class Application {
         this.FinanceValues = {...defaultValues}
 
         this._addEventListeners()
-        this._bindHTML()
+
+        // Binding the HTML
+        this.FinanceElements.pv.setAttribute('value', (Math.abs(this.FinanceValues.pv)).toString())
+        this.FinanceElements.rate.setAttribute('value', (this.FinanceValues.rate*100).toString())
+        this.FinanceElements.time.setAttribute('value', this.FinanceValues.time.toString())
+        this.FinanceElements.pmt.setAttribute('value', this.FinanceValues.pmt.toString())
 
     }
 
@@ -85,28 +94,28 @@ class Application {
             this.FinanceElements.pmt, 
             (n: number) => this.FinanceValues.pmt = n, 
             () => this.FinanceValues.pmt,
-            (stringValue: string) => this.numberValidationService.isNumber(stringValue, NumberType.Currency)
+            NumberType.Currency
         )
 
         this._onChangeEvent(
             this.FinanceElements.pv, 
             (n: number) => this.FinanceValues.pv = n, 
             () => this.FinanceValues.pv,
-            (stringValue: string) => this.numberValidationService.isNumber(stringValue, NumberType.Currency)
+            NumberType.Currency
         )
 
         this._onChangeEvent(
             this.FinanceElements.rate, 
             (n: number) => this.FinanceValues.rate = n, 
             () => this.FinanceValues.rate,
-            (stringValue: string) => this.numberValidationService.isNumber(stringValue, NumberType.Decimal)
+            NumberType.Decimal
         )
 
         this._onChangeEvent(
             this.FinanceElements.time, 
             (n: number) => this.FinanceValues.time = n, 
             () => this.FinanceValues.time,
-            (stringValue: string) => this.numberValidationService.isNumber(stringValue, NumberType.Decimal)
+            NumberType.Decimal
         )
 
     }
@@ -117,7 +126,7 @@ class Application {
         Element: HTMLInputElement, 
         changeFinanceValueCallBack: (n: number) => void,
         getLastValue: () => number,
-        isValidNumber: (stringNumber: string) => boolean
+        numberType: NumberType
     ) {
 
         Element.addEventListener("input", (event) => {
@@ -133,7 +142,8 @@ class Application {
                     return
                 }
 
-                if(isValidNumber(value)) {
+                
+                if(this.numberValidationService.isNumber(value, numberType)) {
                     Element.value = value
                     changeFinanceValueCallBack(parseFloat(value))
                 } else {
@@ -142,14 +152,6 @@ class Application {
 
             }
         })
-    }
-
-
-    private _bindHTML(){
-        this.FinanceElements.pv.setAttribute('value', (Math.abs(this.FinanceValues.pv)).toString())
-        this.FinanceElements.rate.setAttribute('value', (this.FinanceValues.rate*100).toString())
-        this.FinanceElements.time.setAttribute('value', this.FinanceValues.time.toString())
-        this.FinanceElements.pmt.setAttribute('value', this.FinanceValues.pmt.toString())
     }
 
 
