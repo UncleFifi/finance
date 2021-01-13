@@ -9,3 +9,8 @@ export function getElement(id: string) {
 export function getInputElement(id: string) {
     return getElement(id) as HTMLInputElement
 }
+
+export const USDformatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+});

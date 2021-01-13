@@ -9,7 +9,8 @@ import {
 import {
     currencyRound, 
     getElement, 
-    getInputElement
+    getInputElement,
+    USDformatter
 } from './HelperMethods'
 
 import { 
@@ -22,31 +23,12 @@ import TableActions, {
     IRowData
 } from './Table'
 
-
+// Should only have one
 const finance = new Finance()
-const defaultValues: IFinanceValues = {
-    pv: 260000,
-    rate: 0.0425,
-    time: 30,
-    pmt: currencyRound(finance.PMT(0.0425/12, 30*12, -260000, 0))
-}
-
-const sampleTableData: Array<IRowData> = [
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    },
-    {
-        Balance: "1000",
-        Interest: "800",
-        Principal: "200"
-    }
-]
-
 
 class Application {
 
+    // ATTRIBUTES
     private numberValidationService: NumberValidatorActions
     private DOMElements: IDOMElements
     private FinanceElements: ITVMElements
@@ -57,7 +39,8 @@ class Application {
         this.numberValidationService = new NumberValidator()
 
         this.DOMElements = {
-            submitButton:   getElement('submit')
+            submitButton:   getElement('submit'),
+            pmtButton:      getElement('calc-pmt')
         }
 
         this.FinanceElements = {
@@ -67,35 +50,82 @@ class Application {
             pmt:            getInputElement('pmt')
         }
 
-        this.FinanceValues = {...defaultValues}
+        this.FinanceValues = {
+            // pmt:    0,
+            pv:     0,
+            rate:   0,
+            time:   30
+        }
 
         this._addEventListeners()
 
         // Binding the HTML
-        this.FinanceElements.pv.setAttribute('value', (Math.abs(this.FinanceValues.pv)).toString())
-        this.FinanceElements.rate.setAttribute('value', (this.FinanceValues.rate*100).toString())
+        // this.FinanceElements.pv.setAttribute('value', (Math.abs(this.FinanceValues.pv)).toString())
+        // this.FinanceElements.rate.setAttribute('value', (this.FinanceValues.rate).toString())
         this.FinanceElements.time.setAttribute('value', this.FinanceValues.time.toString())
-        this.FinanceElements.pmt.setAttribute('value', this.FinanceValues.pmt.toString())
+        // this.FinanceElements.pmt.setAttribute('value', this.FinanceValues.pmt.toString())
 
     }
+
+    get pmt()
+    {
+        const { pv, rate, time } = this.FinanceValues
+        const Terms = time * 12
+        return finance.PMT(rate/12, Terms, -pv, 0)
+    }
+
+    private _getTableData() {
+
+        const {
+            pv,
+            rate,
+            time
+        } = this.FinanceValues
+        
+        const Terms =       time * 12
+        const PMT =         this.pmt
+
+        
+        const tableData: Array<IRowData> = []
+
+        let i = 0
+        let BBal = pv
+
+        while(i < Terms) {
+            i++
+            let Interest =      BBal * (rate/12)
+            let Principal =     PMT - Interest
+            let Balance =       BBal - Principal
+            BBal = Balance
+            tableData.push({
+                Balance: USDformatter.format(Balance),
+                Interest: USDformatter.format(Interest),
+                Principal: USDformatter.format(Principal)
+            })
+
+        }
+
+        return tableData
+    }
+
+
 
     private _addEventListeners() {
         
         this.DOMElements.submitButton.addEventListener('click', () => {
-
             TableActions.showTable()
-            // Should also build the table from list of values or something....
-            TableActions.renderNewTable(sampleTableData)
+            // Should also build the table from list of values or something...
+            const tableDAT = this._getTableData()
+            TableActions.renderNewTable(tableDAT)
+        })
 
+        this.DOMElements.pmtButton.addEventListener('click', () => {
+            this.FinanceElements.pmt.setAttribute('value', USDformatter.format(this.pmt))
+            // make Other button Appear...
+            this.DOMElements.submitButton.classList.remove('no-display')
         })
 
 
-        this._onChangeEvent(
-            this.FinanceElements.pmt, 
-            (n: number) => this.FinanceValues.pmt = n, 
-            () => this.FinanceValues.pmt,
-            NumberType.Currency
-        )
 
         this._onChangeEvent(
             this.FinanceElements.pv, 
@@ -108,16 +138,33 @@ class Application {
             this.FinanceElements.rate, 
             (n: number) => this.FinanceValues.rate = n, 
             () => this.FinanceValues.rate,
-            NumberType.Decimal
+            NumberType.APR
         )
 
         this._onChangeEvent(
             this.FinanceElements.time, 
             (n: number) => this.FinanceValues.time = n, 
             () => this.FinanceValues.time,
-            NumberType.Decimal
+            NumberType.Int
         )
 
+    }
+
+    private validateValuesForPMTButton()
+    {
+        const isValidPV = this.numberValidationService.isNumber(this.FinanceValues.pv.toString(), NumberType.Decimal) && this.FinanceValues.pv > 0
+        if(isValidPV === false) {
+            return
+        }
+        const isValidRate = this.numberValidationService.isNumber(this.FinanceValues.rate.toString(), NumberType.APR)  && this.FinanceValues.rate > 0
+        if(isValidRate === false) {
+            return
+        }
+        const isValidTime = this.numberValidationService.isNumber(this.FinanceValues.time.toString(), NumberType.Int) && this.FinanceValues.time > 0
+        if(isValidTime === false) {
+            return
+        }
+        return true
     }
 
 
@@ -132,10 +179,7 @@ class Application {
         Element.addEventListener("input", (event) => {
             const HTMLElement = event.target
             if(typeof HTMLElement === 'object' && HTMLElement !== null) {
-
-                const _inputElement = <HTMLInputElement>HTMLElement
-                const value = _inputElement.value
-
+                const value = (<HTMLInputElement>HTMLElement).value
                 if(value === '') {
                     Element.value = value
                     changeFinanceValueCallBack(0)
@@ -146,16 +190,19 @@ class Application {
                 if(this.numberValidationService.isNumber(value, numberType)) {
                     Element.value = value
                     changeFinanceValueCallBack(parseFloat(value))
+                    
+                    if(this.validateValuesForPMTButton()) {
+                        this.DOMElements.pmtButton.classList.remove('disabled')
+                    } else {
+                        this.DOMElements.pmtButton.classList.add('disabled')
+                    }
+
                 } else {
                     Element.value = getLastValue().toString()
                 }
-
             }
         })
     }
-
-
-
 }
 
 

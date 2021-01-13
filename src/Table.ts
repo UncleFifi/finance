@@ -3,7 +3,7 @@ import { getElement } from './HelperMethods'
 export interface IRowData {
     Principal: string
     Interest: string
-    Balance: string
+    Balance: string//Ending
 }
 
 class FinancialTable {
@@ -40,9 +40,9 @@ class FinancialTable {
 
         const tr = document.createElement('tr')
         tr.append(this._createTableData((index+1).toString()))
-        tr.append(this._createTableData(Balance))
-        tr.append(this._createTableData(Interest))
         tr.append(this._createTableData(Principal))
+        tr.append(this._createTableData(Interest))
+        tr.append(this._createTableData(Balance))
         this.tableBody.append(tr)
 
     }

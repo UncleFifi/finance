@@ -25,6 +25,13 @@
       .fullWidth {
         width: 100%;
       }
+
+    /* Chrome, Safari, Edge, Opera */
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
     </style>
   </head>
   <body>
@@ -38,31 +45,37 @@
         </div>
       <div class="row">
         <div class="input-field col l3 m6 s12">
-          <input placeholder="Financed Amount" id="pv" type="number" />
+          <input class="center-align" placeholder="Financed Amount" id="pv" type="number" />
           <label for="pv">Mortgage</label>
         </div>
         <div class="input-field col l3 m6 s12">
-          <input placeholder="APR" id="rate" type="number" />
+          <input class="center-align" placeholder="APR" id="rate" type="number" />
           <label for="rate">Rate</label>
         </div>
         <div class="input-field col l3 m6 s12">
-          <input placeholder="Years" id="time" type="number" />
+          <input class="center-align" placeholder="Years" id="time" type="number" />
           <label for="time">Years</label>
         </div>
         <div class="input-field col l3 m6 s12">
-          <input placeholder="Monthly Payment" id="pmt" type="number" />
+          <input class="center-align" placeholder="Monthly Payment" disabled id="pmt" text="number" />
           <label for="pmt">PMT</label>
         </div>
       </div>
 
       <div class="row">
         <div class="col s12">
-          <button
-            id="submit"
-            class="btn btn-large waves-effect waves-yellow waves-light fullWidth"
-            type="submit"
-            name="action"
-          >
+          <button id="calc-pmt" class="btn btn-large waves-effect waves-yellow waves-light fullWidth disabled" type="submit" name="action">
+            <i class="material-icons left">attach_money</i>
+            Calculate Montly PMT
+            <i class="material-icons right">attach_money</i>
+          </button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col s12">
+          <button id="submit" class="btn btn-large waves-effect waves-yellow waves-light fullWidth no-display" type="submit" name="action">
+            <i class="material-icons left">grid_on</i>
             Show Amortization Schedule
             <i class="material-icons right">grid_on</i>
           </button>
@@ -75,7 +88,7 @@
             <th>#</th>
             <th>Principal</th>
             <th>Interest</th>
-            <th>Balance</th>
+            <th>Ending Balance</th>
           </tr>
         </thead>
         <tbody id="tbl-body">
